@@ -4,7 +4,7 @@ PSQL="psql --username=freecodecamp --dbname=periodic_table --tuples-only -c"
 
 INPUT=$1
 
-if [[ $INPUT =~ [0-9] ]]
+if [[ $INPUT =~ ^[0-9] ]]
 	then
 	#echo testing
 	 GET_RESULT_ATOMIC_NUMBER=$($PSQL "select atomic_number, name, symbol, type, atomic_mass, melting_point_celsius, boiling_point_celsius from elements inner join properties using(atomic_number) inner join types using(type_id) where atomic_number = $INPUT")
@@ -41,6 +41,9 @@ elif [[ $INPUT =~ ^[A-Z][a-z] ]]
          echo "The element with atomic number $ATOMIC_NUMBER is $NAME ($SYMBOL). It's a $TYPE, with a mass of $ATOMIC_MASS amu. $NAME has a melting point of $MELTING_POINT_CELSIUS celsius and a boiling point of $BOILING_POINT_CELSIUS celsius."
          done
 	fi
-else	
+elif [[ -z $INPUT ]]
+	then
         echo Please provide an element as an argument.
+else
+ 	echo "I could not find that element in the database."
 fi
